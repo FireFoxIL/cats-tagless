@@ -58,6 +58,7 @@ object Utils:
     clz =>
       val algFApplied = TypeRepr.of[Alg[F]]
       val methods = definedMethodsInTypeSym(using quotes)(clz)
+      println(methods)
       methods.map { method =>
         val asSeenApplied = algFApplied.memberType(method)
         Symbol.newMethod(

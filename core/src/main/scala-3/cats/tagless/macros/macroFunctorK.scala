@@ -51,6 +51,7 @@ object macroFunctorK:
         DefDef(
           method,
           argss =>
+            println(typedTree.tpe)
             typedTree.tpe.simplified.asMatchable match
               case at @ AppliedType(o, inner) =>
                 val apply = methodApply(eaf)(method, argss)
@@ -61,8 +62,17 @@ object macroFunctorK:
         )
       }
 
+    println("BODY:")
+    println(body.map(_.show).mkString("\n"))
+
     val clsDef = ClassDef(cls, parents, body = body)
+
+    println("CLSDEF:")
+    println(clsDef.show)
+
     val newCls = Typed(Apply(Select(New(TypeIdent(cls)), cls.primaryConstructor), Nil), TypeTree.of[Alg[G]])
     val expr = Block(List(clsDef), newCls).asExpr
+
+    println(expr)
 
     expr.asExprOf[Alg[G]]
